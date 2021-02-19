@@ -56,7 +56,7 @@ struct ContentView: View {
                 }
                 
                 Section(header: Text("Total amount")) {
-                    Text("$\(self.grandTotal)")
+                    Text("$\(self.grandTotal, specifier: "%.2f")")
                 }
             }
             .navigationBarTitle("WeSplit")
