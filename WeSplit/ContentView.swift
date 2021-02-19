@@ -10,22 +10,31 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var checkAmount = ""
-    @State private var numberOfPeople = 2
+    @State private var numberOfPeople = ""
     @State private var tipPercentage = 2
-    @State private var grandTotal: Double = 0.0
     
     let tipPercentages = [10, 15, 20, 25, 0]
     
     var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+        let peopleCount = Double(Int(numberOfPeople) ?? 0)
         let tipSelection = Double(tipPercentages[tipPercentage])
         let orderAmount = Double(checkAmount) ?? 0.0
         
         let tipValue = (tipSelection / 100) * orderAmount
-        self.grandTotal = orderAmount + tipValue
-        let amountPerPerson = self.grandTotal / peopleCount
+        let billTotal = orderAmount + tipValue
+        let amountPerPerson = billTotal / peopleCount
         
         return amountPerPerson
+    }
+    
+    var grandTotal: Double {
+        let tipSelection = Double(tipPercentages[tipPercentage])
+        let orderAmount = Double(checkAmount) ?? 0.0
+        
+        let tipValue = (tipSelection / 100) * orderAmount
+        let billTotal = orderAmount + tipValue
+        
+        return billTotal
     }
     
     var body: some View {
@@ -35,11 +44,8 @@ struct ContentView: View {
                     TextField("Amount", text: $checkAmount)
                         .keyboardType(.decimalPad)
                     
-                    Picker("Number of people", selection: $numberOfPeople) {
-                        ForEach(2..<100) {
-                            Text("\($0) people")
-                        }
-                    }
+                    TextField("Number of people", text: $numberOfPeople)
+                        .keyboardType(.decimalPad)
                 }
                 
                 Section(header: Text("How much tip do you want to leave?")){
@@ -52,11 +58,15 @@ struct ContentView: View {
                 }
                 
                 Section(header: Text("Amount per person")) {
-                    Text("$\(totalPerPerson, specifier: "%.2f")")
+                    if checkAmount != "" {
+                        Text("$\(totalPerPerson, specifier: "%.2f")")
+                    } else {
+                        Text("$0.00")
+                    }
                 }
                 
                 Section(header: Text("Total amount")) {
-                    Text("$\(self.grandTotal)")
+                    Text("$\(self.grandTotal, specifier: "%.2f")")
                 }
             }
             .navigationBarTitle("WeSplit")
