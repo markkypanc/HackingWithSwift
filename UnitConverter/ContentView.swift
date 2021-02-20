@@ -15,6 +15,41 @@ struct ContentView: View {
     
     let unit: [String] = ["m", "km", "ft", "yd", "mi"]
     
+    var result: Measurement<UnitLength> {
+        
+        let inputInNumber = Double(inputTextField) ?? 0.0
+        var inputWithUnit = Measurement(value: 0, unit: UnitLength.meters)
+        var outputWithUnit: Measurement<UnitLength>
+        
+        switch inputUnit {
+        case 0:
+            inputWithUnit = Measurement(value: inputInNumber, unit: UnitLength.meters)
+        case 1:
+            inputWithUnit = Measurement(value: inputInNumber, unit: UnitLength.kilometers)
+        case 2:
+            inputWithUnit = Measurement(value: inputInNumber, unit: UnitLength.feet)
+        case 3:
+            inputWithUnit = Measurement(value: inputInNumber, unit: UnitLength.yards)
+        default:
+            inputWithUnit = Measurement(value: inputInNumber, unit: UnitLength.miles)
+        }
+        
+        switch outputUnit {
+        case 0:
+            outputWithUnit = inputWithUnit.converted(to: UnitLength.meters)
+        case 1:
+            outputWithUnit = inputWithUnit.converted(to: UnitLength.kilometers)
+        case 2:
+            outputWithUnit = inputWithUnit.converted(to: UnitLength.feet)
+        case 3:
+            outputWithUnit = inputWithUnit.converted(to: UnitLength.yards)
+        default:
+            outputWithUnit = inputWithUnit.converted(to: UnitLength.miles)
+        }
+        
+        return outputWithUnit
+    }
+    
     var body: some View {
         NavigationView {
             Form {
@@ -37,7 +72,7 @@ struct ContentView: View {
                 }
                 
                 Section(header: Text("Result")) {
-                    Text("Blank for now")
+                    Text("\(result.description)")
                 }
             }.navigationBarTitle("Unit Converter")
         }
