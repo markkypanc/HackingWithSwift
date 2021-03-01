@@ -29,8 +29,12 @@ extension Color {
 
 struct ContentView: View {
     
-    var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"]
+    var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "USA"].shuffled()
     var correctAnswer = Int.random(in: 0...2)
+    
+    @State private var showingScore = false
+    @State private var scoreTitle = ""
+    
     
     var body: some View {
         
@@ -42,7 +46,7 @@ struct ContentView: View {
             VStack(spacing: 30) {
                 
                 VStack {
-                    Text("Tap th flag of")
+                    Text("Tap the flag of")
                         .font(.title)
                     Text(countries[correctAnswer])
                         .font(.system(size: 20))
@@ -56,7 +60,7 @@ struct ContentView: View {
                         Image(self.countries[number])
                             .resizable()
                     })
-                    .cornerRadius(17)
+                    .cornerRadius(18)
                     .shadow(color: .dropShadow, radius: 15, x: 10, y: 10)
                     .shadow(color: .dropLight, radius: 15, x: -10, y: -10)
                 }
